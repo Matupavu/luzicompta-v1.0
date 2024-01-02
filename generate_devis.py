@@ -130,6 +130,10 @@ def add_demandeur_details(canvas, demandeur, x, y, font_name, font_size):
     canvas.drawString(x, y, f"Demandeur : {demandeur}")
 
 def add_nature_intervention(canvas, intervention, x, y, label_font_name, label_font_size, desc_font_name, desc_font_size, cadre_color, page_width, espacement):
+    cadre_height = 40  # Hauteur du cadre
+    text_padding = 10  # Espacement entre le haut du cadre et le texte
+    y += cadre_height - text_padding # Poistion y pour le texte
+    
     """
     Ajoute la nature de l'intervention sur le PDF.
 
@@ -145,20 +149,17 @@ def add_nature_intervention(canvas, intervention, x, y, label_font_name, label_f
     :param page_width: Largeur de la page.
     :param espacement: Espacement entre le cadre et le tableau des articles.
     """
-    cadre_height = 40  # Hauteur du cadre
-    text_padding = 10  # Espacement entre le haut du cadre et le texte
-
     # Dessiner le cadre
     canvas.setStrokeColor(cadre_color)
     canvas.rect(x, y, page_width - 2*x, cadre_height)  # Cadre en pleine largeur
 
     # Positionner le libellé "Nature de l'intervention :"
     canvas.setFont(label_font_name, label_font_size)
-    canvas.drawString(x + 10, y + cadre_height - text_padding - label_font_size, "Nature de l'intervention :")
+    canvas.drawString(x + 10, y + cadre_height - label_font_size, "Nature de l'intervention :")
 
     # Positionner la description de l'intervention en haut du cadre
     canvas.setFont(desc_font_name, desc_font_size)
-    canvas.drawString(x + 180, y + cadre_height - text_padding - desc_font_size, intervention)
+    canvas.drawString(x + 180, y + cadre_height - desc_font_size, intervention)
     
 def add_articles_table(canvas, articles, x, y, col_widths, header_font_name, cell_font_name, font_size):
     """
