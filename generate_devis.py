@@ -131,9 +131,8 @@ def add_demandeur_details(canvas, demandeur, x, y, font_name, font_size):
 
 def add_nature_intervention(canvas, intervention, x, y, label_font_name, label_font_size, desc_font_name, desc_font_size, cadre_color, page_width, espacement):
     cadre_height = 40  # Hauteur du cadre
-    text_padding = 10  # Espacement entre le haut du cadre et le texte
-    y += cadre_height - text_padding # Poistion y pour le texte
-    
+    text_padding = 5  # Espacement entre le haut du cadre et le texte
+
     """
     Ajoute la nature de l'intervention sur le PDF.
 
@@ -153,13 +152,15 @@ def add_nature_intervention(canvas, intervention, x, y, label_font_name, label_f
     canvas.setStrokeColor(cadre_color)
     canvas.rect(x, y, page_width - 2*x, cadre_height)  # Cadre en pleine largeur
 
-    # Positionner le libellé "Nature de l'intervention :"
+    # Positionner l'étiquette "Nature de l'intervention :"
+    label_position_y = y + cadre_height - text_padding - label_font_size
     canvas.setFont(label_font_name, label_font_size)
-    canvas.drawString(x + 10, y + cadre_height - label_font_size, "Nature de l'intervention :")
+    canvas.drawString(x + 10, label_position_y, "Nature de l'intervention :")
 
-    # Positionner la description de l'intervention en haut du cadre
+    # Positionner la description de l'intervention
+    desc_position_y = y + cadre_height - text_padding - desc_font_size
     canvas.setFont(desc_font_name, desc_font_size)
-    canvas.drawString(x + 180, y + cadre_height - desc_font_size, intervention)
+    canvas.drawString(x + 180, desc_position_y, intervention)
     
 def add_articles_table(canvas, articles, x, y, col_widths, header_font_name, cell_font_name, font_size):
     """
@@ -452,5 +453,7 @@ if __name__ == '__main__':
 
     # Appel sécurisé à create_pdf
     create_pdf_safe(devis_info, articles, devis_number, client_name, test_pdf_file_path)
+
+
 
 
