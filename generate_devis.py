@@ -146,20 +146,19 @@ def add_nature_intervention(canvas, intervention, x, y, label_font_name, label_f
     :param espacement: Espacement entre le cadre et le tableau des articles.
     """
     cadre_height = 40  # Hauteur du cadre
-    y -= espacement  # Ajuster la position Y en fonction de l'espacement
+    text_padding = 10  # Espacement entre le haut du cadre et le texte
 
     # Dessiner le cadre
     canvas.setStrokeColor(cadre_color)
     canvas.rect(x, y, page_width - 2*x, cadre_height)  # Cadre en pleine largeur
 
     # Positionner le libellé "Nature de l'intervention :"
-    text_padding = 3  # Espacement entre le haut du cadre et le texte
     canvas.setFont(label_font_name, label_font_size)
-    canvas.drawString(x + 10, y + text_padding, "Nature de l'intervention :")
+    canvas.drawString(x + 10, y + cadre_height - text_padding - label_font_size, "Nature de l'intervention :")
 
-    # Positionner la description de l'intervention
+    # Positionner la description de l'intervention en haut du cadre
     canvas.setFont(desc_font_name, desc_font_size)
-    canvas.drawString(x + 180, y + text_padding, intervention)
+    canvas.drawString(x + 180, y + cadre_height - text_padding - desc_font_size, intervention)
     
 def add_articles_table(canvas, articles, x, y, col_widths, header_font_name, cell_font_name, font_size):
     """
@@ -338,6 +337,18 @@ def create_pdf(devis_info, articles, devis_number, client_name, pdf_file_path):
         # Affichage des informations du client et récupération de la position Y finale
         y_fin_adresse_client = add_client_info(c, devis_info, 400, height - 140, "QanelasMedium", 12, "QanelasBold", 14)
 
+        # Espacement après l'adresse du client
+        espacement_apres_adresse = 20  # valeur en points
+
+        # Taille de la police utilisée pour la date
+        taille_police_date = 12  # estimation basée sur les polices similaires utilisées
+
+        # Espacement souhaité entre la date et le cadre de la nature de l'intervention
+        espacement_souhaite = 20  # valeur en points
+        
+        # Définir l'espacement entre les éléments du PDF
+        espacement = 10  # ajustez cette valeur selon vos besoins
+
         # Affichage de la date
         date_str = devis_info.get('date', None)
         if date_str:
@@ -358,14 +369,14 @@ def create_pdf(devis_info, articles, devis_number, client_name, pdf_file_path):
         espacement_entre_lignes = 14
         c.drawString(400, y_position_demandeur - espacement_entre_lignes, f"Date : {formatted_date}")
 
-        # Position Y pour la nature de l'intervention
-        y_nature_intervention = 520  # Position Y pour la nature de l'intervention
-        espacement = 40  # Espacement entre le cadre et le tableau des articles
+        # Calcul de la position Y pour la nature de l'intervention
+        y_nature_intervention = y_fin_adresse_client - espacement_apres_adresse - taille_police_date - espacement_souhaite
+        
+        # Ajout de la nature de l'intervention
+        add_nature_intervention(c, devis_info['nature_intervention'], 40, y_nature_intervention, "QanelasSemiBold", 12, "QanelasMedium", 12, colors.HexColor("#FF8C00"), width, espacement)
 
         # Hauteur du cadre de la nature de l'intervention
-        hauteur_cadre_nature_intervention = 80  # Ajustez cette valeur en fonction de la hauteur réelle de votre cadre
-
-        add_nature_intervention(c, devis_info['nature_intervention'], 40, y_nature_intervention, "QanelasSemiBold", 12, "QanelasMedium", 12, colors.HexColor("#FF8C00"), width, espacement)
+        hauteur_cadre_nature_intervention = 80  # Gardez ou ajustez cette valeur en fonction de vos besoins
 
         # Position Y pour le tableau des articles
         y_articles_table = y_nature_intervention - espacement - hauteur_cadre_nature_intervention
