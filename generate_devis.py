@@ -131,7 +131,8 @@ def add_demandeur_details(canvas, demandeur, x, y, font_name, font_size):
 
 def add_nature_intervention(canvas, intervention, x, y, label_font_name, label_font_size, desc_font_name, desc_font_size, cadre_color, page_width, espacement):
     cadre_height = 40  # Hauteur du cadre
-    text_padding = 5  # Espacement entre le haut du cadre et le texte
+    text_padding = 10  # Espacement entre le haut du cadre et le texte
+    y += cadre_height - text_padding # Poistion y pour le texte
 
     """
     Ajoute la nature de l'intervention sur le PDF.
@@ -453,6 +454,9 @@ if __name__ == '__main__':
 
     # Appel sécurisé à create_pdf
     create_pdf_safe(devis_info, articles, devis_number, client_name, test_pdf_file_path)
+
+
+
 
 
 
